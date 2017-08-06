@@ -71,6 +71,34 @@ class Bookshelf extends React.Component {
 }
 
 class BookSearch extends React.Component {
+  state =  {
+    query: ''
+  }
+
+  updateQuery = (searchString) => {
+    this.setState({
+      query: searchString
+    });
+
+    if (this.props.onSearchChanged) {
+      this.props.onSearchChanged();
+    }
+
+    setTimeout(() =>
+    {
+      console.log(`state updated to ${this.state.query}`);
+    }, 500);
+
+  }
+
+  clearQuery = () => {
+    this.setState({
+      query: ''
+    });
+
+    console.log('state cleared');
+  }
+
   constructor(props) {
     super();
   }
@@ -81,7 +109,9 @@ class BookSearch extends React.Component {
         <div className="search-books-bar">
           <Link className="close-search" to='/shelves'>Close</Link>
           <div className="search-books-input-wrapper">
-            <input type="text" placeholder="Search by title or author"/>
+            <input type="text"
+              onChange={(event) => this.updateQuery(event.target.value)}
+              placeholder="Search by title or author" />
           </div>
         </div>
         <div className="search-books-results">
@@ -93,10 +123,17 @@ class BookSearch extends React.Component {
 }
 
 class BooksApp extends React.Component {
+
+  onSearchChanged = () => {
+       console.log('The search query changed');
+  }
+
   render() {
     return (
       <div className="app">
-        <Route exact path='/' component={BookSearch} />
+        <Route exact path='/' render={() => (
+          <BookSearch onSearchChanged={this.onSearchChanged} />
+        )} />
         <Route exact path='/shelves' render={() => (
           <div className="list-books">
             <Header headerText="My Reads" />
