@@ -14,10 +14,14 @@ function Header(props) {
 class Book extends React.Component {
   constructor(props) {
     super();
+    this.state = {
+      // Get the initial value of shelf.
+      shelfSelection: props.shelf
+    }
   }
 
-  updateShelf(bookId, shelf) {
-    console.log(`${bookId} updated to ${shelf}`);
+  updateShelf = (event) => {
+    this.setState({shelfSelection: event.target.value});
   }
 
   render() {
@@ -28,7 +32,7 @@ class Book extends React.Component {
             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.thumbnail})` }}></div>
           </a>
           <div className="book-shelf-changer">
-            <select value={this.props.shelf} onChange={this.updateShelf}>
+            <select value={this.state.shelfSelection} onChange={this.updateShelf}>
               <option value="none" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>
@@ -142,6 +146,7 @@ class BookSearch extends React.Component {
               (
                 <li key={x.id}>
                   <Book
+                    id={x.id}
                     title={x.title}
                     previewLink={x.previewLink}
                     shelf={x.shelf}
