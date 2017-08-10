@@ -16,13 +16,19 @@ class Book extends React.Component {
     super();
   }
 
+  updateShelf(bookId, shelf) {
+    console.log(`${bookId} updated to ${shelf}`);
+  }
+
   render() {
     return (
       <div className="book">
         <div className="book-top">
-          <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.coverUrl})` }}></div>
+          <a href={this.props.previewLink} target="_blank">
+            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.thumbnail})` }}></div>
+          </a>
           <div className="book-shelf-changer">
-            <select>
+            <select value={this.props.shelf} onChange={this.updateShelf}>
               <option value="none" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>
@@ -32,7 +38,15 @@ class Book extends React.Component {
           </div>
         </div>
         <div className="book-title">{this.props.title}</div>
-        <div className="book-authors">{this.props.author}</div>
+        <div className="book-authors">
+          {this.props.authors.map(x => (
+              <div key={x}>
+                {x}<br />
+              </div>
+              )
+            )
+          }
+        </div>
       </div>
     );
   }
@@ -46,21 +60,21 @@ class Bookshelf extends React.Component {
   render() {
     return (
       <div className="bookshelf">
-        <h2 className="bookshelf-title">{this.props.description}</h2>
+        <h2 className="bookshelf-title">{this.props.shelf}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
             <li>
               <Book
                 title="To Kill a Mockingbird"
-                author="Harper Lee"
-                coverUrl="http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api"
+                authors={["Harper Lee"]}
+                thumbnail="http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api"
               />
             </li>
             <li>
               <Book
                 title="Ender's Game"
-                author="Orson Scott Card"
-                coverUrl="http://books.google.com/books/content?id=yDtCuFHXbAYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72RRiTR6U5OUg3IY_LpHTL2NztVWAuZYNFE8dUuC0VlYabeyegLzpAnDPeWxE6RHi0C2ehrR9Gv20LH2dtjpbcUcs8YnH5VCCAH0Y2ICaKOTvrZTCObQbsfp4UbDqQyGISCZfGN&source=gbs_api"
+                authors={["Orson Scott Card"]}
+                thumbnail="http://books.google.com/books/content?id=yDtCuFHXbAYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72RRiTR6U5OUg3IY_LpHTL2NztVWAuZYNFE8dUuC0VlYabeyegLzpAnDPeWxE6RHi0C2ehrR9Gv20LH2dtjpbcUcs8YnH5VCCAH0Y2ICaKOTvrZTCObQbsfp4UbDqQyGISCZfGN&source=gbs_api"
               />
             </li>
           </ol>
@@ -72,7 +86,15 @@ class Bookshelf extends React.Component {
 
 class BookSearch extends React.Component {
   state =  {
-    query: ''
+    query: '',
+    books: []
+  }
+
+  componentDidMount() {
+    BooksAPI.getAll().then(books => {
+      this.setState({books: books});
+      console.dir(this.state.books);
+    });
   }
 
   updateQuery = (searchString) => {
@@ -115,7 +137,21 @@ class BookSearch extends React.Component {
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid"></ol>
+          <ol className="books-grid">
+            {this.state.books.map(x =>
+              (
+                <li key={x.id}>
+                  <Book
+                    title={x.title}
+                    previewLink={x.previewLink}
+                    shelf={x.shelf}
+                    authors={x.authors}
+                    thumbnail={x.imageLinks.thumbnail}
+                  />
+                </li>
+              ))
+            }
+          </ol>
         </div>
       </div>
     );
@@ -139,9 +175,9 @@ class BooksApp extends React.Component {
             <Header headerText="My Reads" />
             <div className="list-books-content">
               <div>
-                <Bookshelf description="Currently Reading" />
-                <Bookshelf description="Want to Read" />
-                <Bookshelf description="Read" />
+                <Bookshelf shelf="currentlyReading" />
+                <Bookshelf shelf="wantToRead" />
+                <Bookshelf shelf="read" />
               </div>
             </div>
             <div className="open-search">
