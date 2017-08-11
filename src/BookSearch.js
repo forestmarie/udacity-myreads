@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 class BookSearch extends React.Component {
   state =  {
-    query: '',
     books: []
   }
 
