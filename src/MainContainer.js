@@ -31,7 +31,6 @@ class MainContainer extends React.Component {
   // map in this function.  I'm also doing it this way to avoid a server side
   // hit to getAll.
   bookShelfChanged = (book, shelf) => {
-    console.log(shelf);
     BooksAPI.update(book, shelf).then(() => {
       let shelves = new Map();
 
@@ -43,10 +42,14 @@ class MainContainer extends React.Component {
         newShelf = [...newShelf, {...book, shelf: shelf }];
         shelves.set(shelf, newShelf);
 
-        let untouchedShelf = [...this.state.bookShelves.keys()].filter(x => x !== book.shelf && x !== shelf)[0];
+        let untouchedShelf = [...this.state.bookShelves.keys()]
+          .filter(x => x !== book.shelf && x !== shelf)[0];
+
         shelves.set(untouchedShelf, this.state.bookShelves.get(untouchedShelf));
       } else {
-        let shelfKeys = [...this.state.bookShelves.keys()].filter(x => x !== book.shelf && x !== shelf);
+        let shelfKeys = [...this.state.bookShelves.keys()]
+          .filter(x => x !== book.shelf && x !== 'none');
+
         for (let key of shelfKeys) {
           shelves.set(key, this.state.bookShelves.get(key));
         }
@@ -55,7 +58,6 @@ class MainContainer extends React.Component {
       this.setState({
           bookShelves: shelves
       });
-      console.log(shelf);
       toastr.info(`${book.title} was ${shelf === 'none' ? 'removed' : 'updated'}!`);
     });
   }
