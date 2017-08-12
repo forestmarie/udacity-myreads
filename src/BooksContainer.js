@@ -3,10 +3,16 @@ import toastr from 'toastr';
 import * as BooksAPI from './BooksAPI';
 import Book from './Book';
 import { Link } from 'react-router-dom';
+import  _  from 'lodash';
 
 class BooksContainer extends React.Component {
   state =  {
     books: []
+  }
+
+  constructor() {
+    super();
+    this.updateQuery = _.debounce(this.updateQuery, 677);
   }
 
   updateBook = (book, shelf) => {
@@ -23,10 +29,6 @@ class BooksContainer extends React.Component {
     BooksAPI.search(searchString, 50).then(books => {
       this.setState({books: [...books]});
     });
-  }
-
-  constructor(props) {
-    super();
   }
 
   render() {
