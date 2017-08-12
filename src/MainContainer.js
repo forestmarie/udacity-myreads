@@ -3,6 +3,7 @@ import Header from './Header';
 import Bookshelf from './Bookshelf';
 import { Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
+import toastr from 'toastr';
 
 class MainContainer extends React.Component {
   componentDidMount() {
@@ -45,6 +46,7 @@ class MainContainer extends React.Component {
       this.setState({
           bookShelves: shelves
       });
+      toastr.info(`${book.title} was updated!`);
     });
   }
 

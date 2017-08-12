@@ -2,6 +2,7 @@ import React from 'react';
 import * as BooksAPI from './BooksAPI';
 import Book from './Book';
 import { Link } from 'react-router-dom';
+import toastr from 'toastr';
 
 class BooksContainer extends React.Component {
   state =  {
@@ -20,9 +21,8 @@ class BooksContainer extends React.Component {
   }
 
   updateBook = (book, shelf) => {
-    BooksAPI.update(book, shelf)
-    .catch(() => {
-        console.error('Error updating book');
+    BooksAPI.update(book, shelf).then(() => {
+      toastr.info(`${book.title} was updated!`);
     });
   }
 
