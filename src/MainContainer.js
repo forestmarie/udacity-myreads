@@ -31,22 +31,32 @@ class MainContainer extends React.Component {
   // map in this function.  I'm also doing it this way to avoid a server side
   // hit to getAll.
   bookShelfChanged = (book, shelf) => {
+    console.log(shelf);
     BooksAPI.update(book, shelf).then(() => {
-      let oldShelf = this.state.bookShelves.get(book.shelf).filter(x => x.id !== book.id);
-      let newShelf = this.state.bookShelves.get(shelf);
-      newShelf = [...newShelf, {...book, shelf: shelf }];
-
       let shelves = new Map();
-      shelves.set(book.shelf, oldShelf);
-      shelves.set(shelf, newShelf);
 
-      let untouchedShelf = [...this.state.bookShelves.keys()].filter(x => x !== book.shelf && x !== shelf)[0];
-      shelves.set(untouchedShelf, this.state.bookShelves.get(untouchedShelf));
+      let oldShelf = this.state.bookShelves.get(book.shelf).filter(x => x.id !== book.id);
+      shelves.set(book.shelf, oldShelf);
+
+      if (shelf !== 'none') {
+        let newShelf = this.state.bookShelves.get(shelf);
+        newShelf = [...newShelf, {...book, shelf: shelf }];
+        shelves.set(shelf, newShelf);
+
+        let untouchedShelf = [...this.state.bookShelves.keys()].filter(x => x !== book.shelf && x !== shelf)[0];
+        shelves.set(untouchedShelf, this.state.bookShelves.get(untouchedShelf));
+      } else {
+        let shelfKeys = [...this.state.bookShelves.keys()].filter(x => x !== book.shelf && x !== shelf);
+        for (let key of shelfKeys) {
+          shelves.set(key, this.state.bookShelves.get(key));
+        }
+      }
 
       this.setState({
           bookShelves: shelves
       });
-      toastr.info(`${book.title} was updated!`);
+      console.log(shelf);
+      toastr.info(`${book.title} was ${shelf === 'none' ? 'removed' : 'updated'}!`);
     });
   }
 

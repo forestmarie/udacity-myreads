@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Book from './Book';
 
 class Bookshelf extends React.Component {
@@ -23,10 +24,10 @@ class Bookshelf extends React.Component {
               <Book
                 id={x.id}
                 title={x.title}
-                previewLink={x.previewLink}
                 shelf={x.shelf}
                 onBookShelfChanged={this.updateBook}
                 authors={x.authors}
+                previewLink={x.previewLink}
                 imageLinks={x.imageLinks}
               />
             </li>
@@ -36,6 +37,12 @@ class Bookshelf extends React.Component {
       </div>
     );
   }
+}
+
+Bookshelf.propTypes = {
+  books: PropTypes.array.isRequired,
+  display: PropTypes.string.isRequired,
+  onBookShelfChanged: PropTypes.func.isRequired
 }
 
 export default Bookshelf;

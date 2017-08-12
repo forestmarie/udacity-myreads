@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Book extends React.Component {
   constructor(props) {
@@ -12,11 +13,9 @@ class Book extends React.Component {
   updateShelf = (event) => {
     let shelf = event.target.value;
     let book = { ...this.props };
-    this.setState({shelfSelection: shelf});
 
-    if (this.props.onBookShelfChanged) {
-      this.props.onBookShelfChanged(book, shelf);
-    }
+    this.setState({shelfSelection: shelf});
+    this.props.onBookShelfChanged(book, shelf);
   }
 
   render() {
@@ -50,6 +49,16 @@ class Book extends React.Component {
       </div>
     );
   }
+}
+
+Book.propTypes = {
+  id: PropTypes.string.isRequired,
+  authors: PropTypes.array,
+  imageLinks: PropTypes.object.isRequired,
+  shelf: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  onBookShelfChanged: PropTypes.func.isRequired,
+  previewLink: PropTypes.string.isRequired
 }
 
 export default Book;
