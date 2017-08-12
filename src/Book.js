@@ -1,5 +1,4 @@
 import React from 'react';
-import * as BooksAPI from './BooksAPI';
 
 class Book extends React.Component {
   constructor(props) {
@@ -13,13 +12,11 @@ class Book extends React.Component {
   updateShelf = (event) => {
     let shelf = event.target.value;
     let book = { id: this.props.id };
+    this.setState({shelfSelection: shelf});
 
-    // TODO - should the update method live here or higher up???
-    BooksAPI.update(book, shelf).then(response => {
-      this.setState({shelfSelection: shelf});
-    }).catch(() => {
-        console.error('Error updating book');
-      });
+    if (this.props.onBookShelfChanged) {
+      this.props.onBookShelfChanged(book, shelf);
+    }
   }
 
   render() {

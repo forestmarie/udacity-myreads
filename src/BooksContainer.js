@@ -3,7 +3,7 @@ import * as BooksAPI from './BooksAPI';
 import Book from './Book';
 import { Link } from 'react-router-dom';
 
-class BookSearch extends React.Component {
+class BooksContainer extends React.Component {
   state =  {
     books: []
   }
@@ -17,6 +17,13 @@ class BookSearch extends React.Component {
 
   componentDidMount() {
     this.getAllBooks();
+  }
+
+  updateBook = (book, shelf) => {
+    BooksAPI.update(book, shelf)
+    .catch(() => {
+        console.error('Error updating book');
+    });
   }
 
   updateQuery = (searchString) => {
@@ -39,7 +46,7 @@ class BookSearch extends React.Component {
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <Link className="close-search" to='/shelves'>Close</Link>
+          <Link className="close-search" to='/'>Close</Link>
           <div className="search-books-input-wrapper">
             <input type="text"
               onChange={(event) => this.updateQuery(event.target.value)}
@@ -56,6 +63,7 @@ class BookSearch extends React.Component {
                     title={x.title}
                     previewLink={x.previewLink}
                     shelf={x.shelf}
+                    onBookShelfChanged={this.updateBook}
                     authors={x.authors}
                     thumbnail={x.imageLinks.thumbnail}
                   />
@@ -69,4 +77,4 @@ class BookSearch extends React.Component {
   }
 }
 
-export default BookSearch;
+export default BooksContainer;
