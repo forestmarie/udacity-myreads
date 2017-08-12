@@ -1,8 +1,8 @@
 import React from 'react';
+import toastr from 'toastr';
 import * as BooksAPI from './BooksAPI';
 import Book from './Book';
 import { Link } from 'react-router-dom';
-import toastr from 'toastr';
 
 class BooksContainer extends React.Component {
   state =  {
