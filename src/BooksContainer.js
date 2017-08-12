@@ -9,17 +9,6 @@ class BooksContainer extends React.Component {
     books: []
   }
 
-  getAllBooks = () => {
-    BooksAPI.getAll().then(books => {
-      console.dir(books);
-      this.setState({books: books});
-    });
-  }
-
-  componentDidMount() {
-    this.getAllBooks();
-  }
-
   updateBook = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
       toastr.info(`${book.title} was updated!`);
@@ -28,8 +17,7 @@ class BooksContainer extends React.Component {
 
   updateQuery = (searchString) => {
     if (!searchString) {
-      this.getAllBooks();
-      return;
+      this.setState({books: []});
     }
 
     BooksAPI.search(searchString, 50).then(books => {
