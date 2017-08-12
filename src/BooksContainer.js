@@ -1,14 +1,14 @@
-import React from 'react';
-import toastr from 'toastr';
-import * as BooksAPI from './BooksAPI';
-import Book from './Book';
-import { Link } from 'react-router-dom';
-import _ from 'lodash';
+import React from "react";
+import toastr from "toastr";
+import * as BooksAPI from "./BooksAPI";
+import Book from "./Book";
+import { Link } from "react-router-dom";
+import _ from "lodash";
 
 class BooksContainer extends React.Component {
-  state =  {
+  state = {
     books: []
-  }
+  };
 
   constructor() {
     super();
@@ -19,34 +19,38 @@ class BooksContainer extends React.Component {
     BooksAPI.update(book, shelf).then(() => {
       toastr.info(`${book.title} was updated!`);
     });
-  }
+  };
 
-  updateQuery = (searchString) => {
+  updateQuery = searchString => {
     if (!searchString) {
-      this.setState({books: []});
+      this.setState({ books: [] });
       return;
     }
 
     BooksAPI.search(searchString, 50).then(books => {
-      this.setState({books: [...books]});
+      this.setState({ books: [...books] });
     });
-  }
+  };
 
   render() {
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <Link className="close-search" to='/'>Close</Link>
+          <Link className="close-search" to="/">
+            Close
+          </Link>
           <div className="search-books-input-wrapper">
-            <input type="text"
-              onChange={(event) => this.updateQuery(event.target.value)}
-              placeholder="Search by title or author" />
+            <input
+              type="text"
+              onChange={event => this.updateQuery(event.target.value)}
+              placeholder="Search by title or author"
+            />
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.books.length > 0 && this.state.books.map(x =>
-              (
+            {this.state.books.length > 0 &&
+              this.state.books.map(x =>
                 <li key={x.id}>
                   <Book
                     id={x.id}
@@ -58,9 +62,8 @@ class BooksContainer extends React.Component {
                     imageLinks={x.imageLinks}
                   />
                 </li>
-              ))
-            }
-            {this.state.books.length === 0 && (<div>No results. =(</div>)}
+              )}
+            {this.state.books.length === 0 && <div>No results. =(</div>}
           </ol>
         </div>
       </div>
