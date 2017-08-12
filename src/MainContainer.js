@@ -11,30 +11,56 @@ class MainContainer extends React.Component {
       let wantToReadBooks = books.filter(x => x.shelf === 'wantToRead');
       let currentlyReadingBooks = books.filter(x => x.shelf === 'currentlyReading');
 
-      console.dir(books);
-      console.dir(readBooks);
-      console.dir(wantToReadBooks);
-      console.dir(currentlyReadingBooks);
+      let shelves = new Map();
+      shelves.set('read', readBooks);
+      shelves.set('wantToRead', wantToReadBooks);
+      shelves.set('currentlyReading', currentlyReadingBooks);
+
+      this.setState({
+        bookShelves: shelves
+      });
     });
   }
 
-  constructor(props) {
-    super(props);
-    this.books = new Map();
-    this.books.set('readBooks', []);
-    this.books.set('currentlyReading', []);
-    this.books.set('wantToRead', []);
+  state = {
+     bookShelves: new Map()
+  }
+
+  // Important not to mutate state, so I'm building and replacing the entire
+  // map in this function.  I'm also doing it this way to avoid a server side
+  // hit to getAll.
+  bookShelfChanged = (book, shelf) => {
+    BooksAPI.update(book, shelf).then(() => {
+      let oldShelf = this.state.bookShelves.get(book.shelf).filter(x => x.id !== book.id);
+      let newShelf = this.state.bookShelves.get(shelf);
+      newShelf = [...newShelf, {...book, shelf: shelf }];
+
+      let shelves = new Map();
+      shelves.set(book.shelf, oldShelf);
+      shelves.set(shelf, newShelf);
+
+      let untouchedShelf = [...this.state.bookShelves.keys()].filter(x => x !== book.shelf && x !== shelf)[0];
+      shelves.set(untouchedShelf, this.state.bookShelves.get(untouchedShelf));
+
+      this.setState({
+          bookShelves: shelves
+      });
+    });
   }
 
   render() {
+    let readBooks = this.state.bookShelves.get('read') || [];
+    let wantToReadBooks = this.state.bookShelves.get('wantToRead') || [];
+    let currentlyReadingBooks = this.state.bookShelves.get('currentlyReading') || [];
+
     return (
       <div className="list-books">
         <Header headerText="My Reads" />
         <div className="list-books-content">
           <div>
-            <Bookshelf display="Books I'm reading" shelf="currentlyReading" />
-            <Bookshelf display="Books I want to read" shelf="wantToRead" />
-            <Bookshelf display="Books I've read" shelf="read" />
+            <Bookshelf books={currentlyReadingBooks} display="Books I'm reading" onBookShelfChanged={this.bookShelfChanged} />
+            <Bookshelf books={wantToReadBooks} display="Books I want to read" onBookShelfChanged={this.bookShelfChanged} />
+            <Bookshelf books={readBooks} display="Books I've read" onBookShelfChanged={this.bookShelfChanged} />
           </div>
         </div>
         <div className="open-search">

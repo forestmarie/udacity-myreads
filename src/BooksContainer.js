@@ -33,7 +33,6 @@ class BooksContainer extends React.Component {
     }
 
     BooksAPI.search(searchString, 50).then(books => {
-      console.dir(books);
       this.setState({books: [...books]});
     });
   }
@@ -65,7 +64,7 @@ class BooksContainer extends React.Component {
                     shelf={x.shelf}
                     onBookShelfChanged={this.updateBook}
                     authors={x.authors}
-                    thumbnail={x.imageLinks.thumbnail}
+                    imageLinks={x.imageLinks}
                   />
                 </li>
               ))

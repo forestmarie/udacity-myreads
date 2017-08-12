@@ -11,7 +11,7 @@ class Book extends React.Component {
 
   updateShelf = (event) => {
     let shelf = event.target.value;
-    let book = { id: this.props.id };
+    let book = { ...this.props };
     this.setState({shelfSelection: shelf});
 
     if (this.props.onBookShelfChanged) {
@@ -25,7 +25,7 @@ class Book extends React.Component {
       <div className="book">
         <div className="book-top">
           <a href={this.props.previewLink} target="_blank">
-            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.thumbnail})` }}></div>
+            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.imageLinks.thumbnail})` }}></div>
           </a>
           <div className="book-shelf-changer">
             <select value={this.state.shelfSelection} onChange={this.updateShelf}>
