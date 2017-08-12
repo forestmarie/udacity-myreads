@@ -20,11 +20,20 @@ class Book extends React.Component {
 
   render() {
     let authors = this.props.authors || [];
+    let backgroundImage;
+
+    if (this.props.imageLinks) {
+      backgroundImage = this.props.imageLinks.thumbnail;
+    } else {
+      // Hack here - I'm passing in an invalid id to get a standard 'No Image Available' photo as
+      // there are a few books coming back with no imageLinks.
+      backgroundImage = 'https://books.google.com/books/content?id=invalidId&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api';
+    }
     return (
       <div className="book">
         <div className="book-top">
           <a href={this.props.previewLink} target="_blank">
-            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.imageLinks.thumbnail})` }}></div>
+            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${backgroundImage})` }}></div>
           </a>
           <div className="book-shelf-changer">
             <select value={this.state.shelfSelection} onChange={this.updateShelf}>
@@ -54,7 +63,7 @@ class Book extends React.Component {
 Book.propTypes = {
   id: PropTypes.string.isRequired,
   authors: PropTypes.array,
-  imageLinks: PropTypes.object.isRequired,
+  imageLinks: PropTypes.object,
   shelf: PropTypes.string,
   title: PropTypes.string.isRequired,
   onBookShelfChanged: PropTypes.func.isRequired,

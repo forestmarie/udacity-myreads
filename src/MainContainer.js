@@ -69,12 +69,12 @@ class MainContainer extends React.Component {
 
     return (
       <div className="list-books">
-        <Header headerText="My Reads" />
+        <Header headerText="Book ManagR" />
         <div className="list-books-content">
           <div>
-            <Bookshelf books={currentlyReadingBooks} display="Books I'm reading" onBookShelfChanged={this.bookShelfChanged} />
-            <Bookshelf books={wantToReadBooks} display="Books I want to read" onBookShelfChanged={this.bookShelfChanged} />
-            <Bookshelf books={readBooks} display="Books I've read" onBookShelfChanged={this.bookShelfChanged} />
+            <Bookshelf books={currentlyReadingBooks} display="Currently Reading" onBookShelfChanged={this.bookShelfChanged} />
+            <Bookshelf books={wantToReadBooks} display="Want to Read" onBookShelfChanged={this.bookShelfChanged} />
+            <Bookshelf books={readBooks} display="Read" onBookShelfChanged={this.bookShelfChanged} />
           </div>
         </div>
         <div className="open-search">

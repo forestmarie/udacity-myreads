@@ -3,7 +3,7 @@ import toastr from 'toastr';
 import * as BooksAPI from './BooksAPI';
 import Book from './Book';
 import { Link } from 'react-router-dom';
-import  _  from 'lodash';
+import _ from 'lodash';
 
 class BooksContainer extends React.Component {
   state =  {
@@ -24,6 +24,7 @@ class BooksContainer extends React.Component {
   updateQuery = (searchString) => {
     if (!searchString) {
       this.setState({books: []});
+      return;
     }
 
     BooksAPI.search(searchString, 50).then(books => {
@@ -44,7 +45,7 @@ class BooksContainer extends React.Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.books.map(x =>
+            {this.state.books.length > 0 && this.state.books.map(x =>
               (
                 <li key={x.id}>
                   <Book
@@ -59,6 +60,7 @@ class BooksContainer extends React.Component {
                 </li>
               ))
             }
+            {this.state.books.length === 0 && (<div>No results. =(</div>)}
           </ol>
         </div>
       </div>
