@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 class Book extends React.Component {
   state = {
-    shelfSelection: "none"
+    shelfSelection: ""
   };
 
   // Note: When the book component is used from the main bookshelf container, the shelf
