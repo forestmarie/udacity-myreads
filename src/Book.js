@@ -90,6 +90,7 @@ Book.propTypes = {
   shelf: PropTypes.string,
   title: PropTypes.string.isRequired,
   onBookShelfChanged: PropTypes.func.isRequired,
+  onGetBookShelf: PropTypes.func,
   previewLink: PropTypes.string.isRequired,
   removeable: PropTypes.bool
 };

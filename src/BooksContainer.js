@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import toastr from "toastr";
 import * as BooksAPI from "./BooksAPI";
 import Book from "./Book";
@@ -77,5 +78,9 @@ class BooksContainer extends React.Component {
     );
   }
 }
+
+BooksContainer.propTypes = {
+  onGetBookShelf: PropTypes.func.isRequired
+};
 
 export default BooksContainer;
