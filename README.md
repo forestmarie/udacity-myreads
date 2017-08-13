@@ -7,13 +7,16 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Requirements
 * Node 7 or above
 
+## Contributing 
+
+As this is a learning project, feel free to submit any pull requests.
+
 ## Installing
 
 1. Clone this repo:
 ```
 git clone https://github.com/forestmarie/udacity-myreads
 ```
-
 2. Install dependencies:
 ```
 yarn
@@ -23,3 +26,8 @@ yarn
 ```
 yarn start
 ```
+## License 
+
+**The MIT License**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
