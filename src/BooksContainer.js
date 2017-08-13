@@ -23,7 +23,7 @@ class BooksContainer extends React.Component {
 
   updateBook = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
-      toastr.info(`${book.title} was updated!`);
+      toastr.info(`${book.title} was added to ${shelf}!`);
     });
   };
 
