@@ -6,64 +6,28 @@ import { Link } from "react-router-dom";
 import * as BooksAPI from "./BooksAPI";
 
 class MainContainer extends React.Component {
+  state = {
+    books: []
+  };
+
   componentDidMount() {
     BooksAPI.getAll().then(books => {
-      let readBooks = books.filter(x => x.shelf === "read");
-      let wantToReadBooks = books.filter(x => x.shelf === "wantToRead");
-      let currentlyReadingBooks = books.filter(
-        x => x.shelf === "currentlyReading"
-      );
-
-      let shelves = new Map();
-      shelves.set("read", readBooks);
-      shelves.set("wantToRead", wantToReadBooks);
-      shelves.set("currentlyReading", currentlyReadingBooks);
-
       this.setState({
-        bookShelves: shelves
+        books: books
       });
     });
   }
 
-  state = {
-    bookShelves: new Map()
-  };
-
-  // Important not to mutate state, so I'm building and replacing the entire
-  // map in this function.  I'm also doing it this way to avoid a server side
-  // hit to getAll.
   bookShelfChanged = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
-      let shelves = new Map();
+      let books = this.state.books.filter(x => x.id !== book.id);
 
-      let oldShelf = this.state.bookShelves
-        .get(book.shelf)
-        .filter(x => x.id !== book.id);
-      shelves.set(book.shelf, oldShelf);
-
-      if (shelf !== "none") {
-        let newShelf = this.state.bookShelves.get(shelf);
-        newShelf = [...newShelf, { ...book, shelf: shelf }];
-        shelves.set(shelf, newShelf);
-
-        let untouchedShelf = [...this.state.bookShelves.keys()].filter(
-          x => x !== book.shelf && x !== shelf
-        )[0];
-
-        shelves.set(untouchedShelf, this.state.bookShelves.get(untouchedShelf));
+      if (shelf === "none") {
+        this.setState({ books: books });
       } else {
-        let shelfKeys = [...this.state.bookShelves.keys()].filter(
-          x => x !== book.shelf && x !== "none"
-        );
-
-        for (let key of shelfKeys) {
-          shelves.set(key, this.state.bookShelves.get(key));
-        }
+        this.setState({ books: [...books, { ...book, shelf }] });
       }
 
-      this.setState({
-        bookShelves: shelves
-      });
       toastr.info(
         `${book.title} was ${shelf === "none" ? "removed" : "updated"}!`
       );
@@ -71,10 +35,10 @@ class MainContainer extends React.Component {
   };
 
   render() {
-    let readBooks = this.state.bookShelves.get("read") || [];
-    let wantToReadBooks = this.state.bookShelves.get("wantToRead") || [];
-    let currentlyReadingBooks =
-      this.state.bookShelves.get("currentlyReading") || [];
+    let books = this.state.books;
+    let readBooks = books.filter(x => x.shelf === "read");
+    let wantToReadBooks = books.filter(x => x.shelf === "wantToRead");
+    let readingBooks = books.filter(x => x.shelf === "currentlyReading");
 
     return (
       <div className="list-books">
@@ -82,21 +46,18 @@ class MainContainer extends React.Component {
         <div className="list-books-content">
           <div>
             <Bookshelf
-              books={currentlyReadingBooks}
+              books={readingBooks}
               display="Currently Reading"
-              onGetBookShelf={this.props.onGetBookShelf}
               onBookShelfChanged={this.bookShelfChanged}
             />
             <Bookshelf
               books={wantToReadBooks}
               display="Want to Read"
-              onGetBookShelf={this.props.onGetBookShelf}
               onBookShelfChanged={this.bookShelfChanged}
             />
             <Bookshelf
               books={readBooks}
               display="Read"
-              onGetBookShelf={this.props.onGetBookShelf}
               onBookShelfChanged={this.bookShelfChanged}
             />
           </div>
