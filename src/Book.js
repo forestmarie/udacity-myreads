@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 class Book extends React.Component {
   state = {
-    shelfSelection: null
+    shelfSelection: "none"
   };
 
   // Note: When the book component is used from the main bookshelf container, the shelf
@@ -55,19 +55,16 @@ class Book extends React.Component {
             />
           </a>
           <div className="book-shelf-changer">
-            {this.state.shelfSelection &&
-              <select
-                value={this.state.shelfSelection}
-                onChange={this.updateShelf}
-              >
-                <option value="none" disabled>
-                  Move to...
-                </option>
-                <option value="currentlyReading">Currently Reading</option>
-                <option value="wantToRead">Want to Read</option>
-                <option value="read">Read</option>
-                <option value="none">None</option>
-              </select>}
+            <select
+              value={this.state.shelfSelection}
+              onChange={this.updateShelf}
+            >
+              <option disabled>Move to...</option>
+              <option value="currentlyReading">Currently Reading</option>
+              <option value="wantToRead">Want to Read</option>
+              <option value="read">Read</option>
+              {this.props.removeable && <option value="none">None</option>}
+            </select>
           </div>
         </div>
         <div className="book-title">
@@ -93,7 +90,8 @@ Book.propTypes = {
   shelf: PropTypes.string,
   title: PropTypes.string.isRequired,
   onBookShelfChanged: PropTypes.func.isRequired,
-  previewLink: PropTypes.string.isRequired
+  previewLink: PropTypes.string.isRequired,
+  removeable: PropTypes.bool
 };
 
 export default Book;

@@ -66,6 +66,7 @@ class BooksContainer extends React.Component {
                     onBookShelfChanged={this.updateBook}
                     authors={x.authors}
                     imageLinks={x.imageLinks}
+                    removeable={false}
                   />
                 </li>
               )}

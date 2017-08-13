@@ -28,6 +28,7 @@ class Bookshelf extends React.Component {
                   onBookShelfChanged={this.updateBook}
                   authors={x.authors}
                   title={x.title}
+                  removeable={true}
                   shelf={x.shelf}
                   previewLink={x.previewLink}
                   imageLinks={x.imageLinks}
