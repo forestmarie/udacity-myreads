@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import toastr from "toastr";
 import * as BooksAPI from "./BooksAPI";
 import Book from "./Book";
@@ -16,15 +15,15 @@ class BooksContainer extends React.Component {
     this.updateQuery = _.debounce(this.updateQuery, 677);
   }
 
-  updateBook = (book, shelf) => {
-    BooksAPI.update(book, shelf).then(() => {
-      toastr.info(`${book.title} was updated!`);
+  getBookShelf = bookId => {
+    return BooksAPI.get(bookId).then(book => {
+      return book.shelf;
     });
   };
 
-  getBookShelf = bookId => {
-    return this.props.onGetBookShelf(bookId).then(shelf => {
-      return shelf;
+  updateBook = (book, shelf) => {
+    BooksAPI.update(book, shelf).then(() => {
+      toastr.info(`${book.title} was updated!`);
     });
   };
 
@@ -78,9 +77,5 @@ class BooksContainer extends React.Component {
     );
   }
 }
-
-BooksContainer.propTypes = {
-  onGetBookShelf: PropTypes.func.isRequired
-};
 
 export default BooksContainer;

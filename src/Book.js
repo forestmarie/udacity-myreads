@@ -7,10 +7,12 @@ class Book extends React.Component {
   };
 
   // Note: When the book component is used from the main bookshelf container, the shelf
-  // is present as the API call for that method has the shelf.  When you're just doing
-  // a search, it's not so I'm fetching it.  A more performant approach would be to make
-  // one call to get my books in the BooksContainer component and sync there but this
-  // is more about learning how to pass props all the way down.
+  // is present as the getAll method has the shelf.  When you're just doing
+  // a search, the shelf doesn't exist so I'm fetching it.
+  //
+  //A more performant approach would be to make one call to getAll in the BooksContainer
+  // component and synchronization the shelves there but this is more about learning how
+  // child components receive props from parent components.
   componentDidMount() {
     if (this.props.shelf) {
       this.setState({ shelfSelection: this.props.shelf });
@@ -23,7 +25,14 @@ class Book extends React.Component {
 
   updateShelf = event => {
     let shelf = event.target.value;
-    let book = { ...this.props };
+    let book = {
+      id: this.props.id,
+      title: this.props.title,
+      authors: this.props.authors,
+      imageLinks: this.props.imageLinks,
+      previewLink: this.props.previewLink,
+      shelf: this.state.shelfSelection
+    };
 
     this.setState({ shelfSelection: shelf });
     this.props.onBookShelfChanged(book, shelf);
