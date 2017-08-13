@@ -2,12 +2,23 @@ import React from "react";
 import PropTypes from "prop-types";
 
 class Book extends React.Component {
-  constructor(props) {
-    super();
-    this.state = {
-      // Get the initial value of shelf.
-      shelfSelection: props.shelf || "none"
-    };
+  state = {
+    shelfSelection: null
+  };
+
+  // Note: When the book component is used from the main bookshelf container, the shelf
+  // is present as the API call for that method has the shelf.  When you're just doing
+  // a search, it's not so I'm fetching it.  A more performant approach would be to make
+  // one call to get my books in the BooksContainer component and sync there but this
+  // is more about learning how to pass props all the way down.
+  componentDidMount() {
+    if (this.props.shelf) {
+      this.setState({ shelfSelection: this.props.shelf });
+    } else {
+      this.props.onGetBookShelf(this.props.id).then(bookShelf => {
+        this.setState({ shelfSelection: bookShelf });
+      });
+    }
   }
 
   updateShelf = event => {
@@ -44,18 +55,19 @@ class Book extends React.Component {
             />
           </a>
           <div className="book-shelf-changer">
-            <select
-              value={this.state.shelfSelection}
-              onChange={this.updateShelf}
-            >
-              <option value="none" disabled>
-                Move to...
-              </option>
-              <option value="currentlyReading">Currently Reading</option>
-              <option value="wantToRead">Want to Read</option>
-              <option value="read">Read</option>
-              <option value="none">None</option>
-            </select>
+            {this.state.shelfSelection &&
+              <select
+                value={this.state.shelfSelection}
+                onChange={this.updateShelf}
+              >
+                <option value="none" disabled>
+                  Move to...
+                </option>
+                <option value="currentlyReading">Currently Reading</option>
+                <option value="wantToRead">Want to Read</option>
+                <option value="read">Read</option>
+                <option value="none">None</option>
+              </select>}
           </div>
         </div>
         <div className="book-title">

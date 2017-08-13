@@ -84,16 +84,19 @@ class MainContainer extends React.Component {
             <Bookshelf
               books={currentlyReadingBooks}
               display="Currently Reading"
+              onGetBookShelf={this.props.onGetBookShelf}
               onBookShelfChanged={this.bookShelfChanged}
             />
             <Bookshelf
               books={wantToReadBooks}
               display="Want to Read"
+              onGetBookShelf={this.props.onGetBookShelf}
               onBookShelfChanged={this.bookShelfChanged}
             />
             <Bookshelf
               books={readBooks}
               display="Read"
+              onGetBookShelf={this.props.onGetBookShelf}
               onBookShelfChanged={this.bookShelfChanged}
             />
           </div>

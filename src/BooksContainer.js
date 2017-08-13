@@ -21,6 +21,12 @@ class BooksContainer extends React.Component {
     });
   };
 
+  getBookShelf = bookId => {
+    return this.props.onGetBookShelf(bookId).then(shelf => {
+      return shelf;
+    });
+  };
+
   updateQuery = searchString => {
     if (!searchString) {
       this.setState({ books: [] });
@@ -56,7 +62,7 @@ class BooksContainer extends React.Component {
                     id={x.id}
                     title={x.title}
                     previewLink={x.previewLink}
-                    shelf={x.shelf}
+                    onGetBookShelf={this.getBookShelf}
                     onBookShelfChanged={this.updateBook}
                     authors={x.authors}
                     imageLinks={x.imageLinks}

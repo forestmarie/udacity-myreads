@@ -25,10 +25,10 @@ class Bookshelf extends React.Component {
               <li key={x.id}>
                 <Book
                   id={x.id}
-                  title={x.title}
-                  shelf={x.shelf}
                   onBookShelfChanged={this.updateBook}
                   authors={x.authors}
+                  title={x.title}
+                  shelf={x.shelf}
                   previewLink={x.previewLink}
                   imageLinks={x.imageLinks}
                 />
