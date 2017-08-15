@@ -20,14 +20,9 @@ class Bookshelf extends React.Component {
                         {this.props.books.map(x => (
                             <li key={x.id}>
                                 <Book
-                                    id={x.id}
+                                    {...x}
                                     onBookShelfChanged={this.updateBook}
-                                    authors={x.authors}
-                                    title={x.title}
                                     removeable={true}
-                                    shelf={x.shelf}
-                                    previewLink={x.previewLink}
-                                    imageLinks={x.imageLinks}
                                 />
                             </li>
                         ))}

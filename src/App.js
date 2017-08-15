@@ -19,7 +19,7 @@ class App extends React.Component {
         });
     }
 
-    bookShelfChanged = (book, shelf) => {
+    updateBook = (book, shelf) => {
         BooksAPI.update(book, shelf).then(() => {
             let books = this.state.books.filter(x => x.id !== book.id);
 
@@ -40,7 +40,7 @@ class App extends React.Component {
                     path="/"
                     render={() => (
                         <MainContainer
-                            onBookShelfChanged={this.bookShelfChanged}
+                            onBookShelfChanged={this.updateBook}
                             books={this.state.books}
                         />
                     )}
@@ -48,7 +48,12 @@ class App extends React.Component {
                 <Route
                     exact
                     path="/search"
-                    render={() => <BooksContainer books={this.state.books} />}
+                    render={() => (
+                        <BooksContainer
+                            onBookShelfChanged={this.updateBook}
+                            books={this.state.books}
+                        />
+                    )}
                 />
             </div>
         );

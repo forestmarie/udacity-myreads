@@ -93,8 +93,7 @@ Book.propTypes = {
     imageLinks: PropTypes.object,
     shelf: PropTypes.string,
     title: PropTypes.string.isRequired,
-    onBookShelfChanged: PropTypes.func.isRequired,
-    onGetBookShelf: PropTypes.func,
+    onBookShelfChanged: PropTypes.func,
     previewLink: PropTypes.string.isRequired,
     removeable: PropTypes.bool
 };

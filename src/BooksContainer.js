@@ -1,5 +1,4 @@
 import React from "react";
-import toastr from "toastr";
 import * as BooksAPI from "./BooksAPI";
 import Book from "./Book";
 import { Link } from "react-router-dom";
@@ -14,12 +13,6 @@ class BooksContainer extends React.Component {
         super();
         this.updateQuery = debounce(this.updateQuery, 677);
     }
-
-    updateBook = (book, shelf) => {
-        BooksAPI.update(book, shelf).then(() => {
-            toastr.info(`${book.title} was added to ${shelf}!`);
-        });
-    };
 
     updateQuery = searchString => {
         if (!searchString) {
@@ -43,13 +36,8 @@ class BooksContainer extends React.Component {
     _renderBook = book => (
         <li key={book.id}>
             <Book
-                id={book.id}
-                title={book.title}
-                previewLink={book.previewLink}
-                shelf={book.shelf}
-                onBookShelfChanged={this.updateBook}
-                authors={book.authors}
-                imageLinks={book.imageLinks}
+                {...book}
+                onBookShelfChanged={this.props.onBookShelfChanged}
                 removeable={false}
             />
         </li>
